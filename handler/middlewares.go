@@ -6,29 +6,32 @@ import (
 	"strconv"
 )
 
+// getRequestOnly is validating only GET requests
 func (s *handlers) getGetRequestOnly(next http.HandlerFunc) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if !isRequestValid(r) {
 			s.logger.Println("Request not allowed")
+			http.Error(rw, "method not allowed", http.StatusMethodNotAllowed)
 			rw.Header().Set("Access-Control-Allow-Methods", "GET")
-			rw.WriteHeader(http.StatusMethodNotAllowed)
+
 			var message = []byte(`{"Acces Allowed Only": "GET"}`)
 			rw.Write(message)
-			http.Error(rw, "method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
 		next.ServeHTTP(rw, r)
 	}
 }
 
+// getValidQueryOnly is validating if an URL is valid. An URL is invalid
+// if it misses salary_day value or if that value is invalid
 func (s *handlers) getValidQueryOnly(next http.HandlerFunc) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if !isQueryValid(r) {
 			s.logger.Println("Invalid query")
 			var message = []byte(`{"Not found": "Invalid Query/URL"}`)
+			http.NotFound(rw, r)
 			rw.Write(message)
 
-			http.NotFound(rw, r)
 			return
 		}
 		next.ServeHTTP(rw, r)

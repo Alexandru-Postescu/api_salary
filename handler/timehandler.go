@@ -19,10 +19,12 @@ func NewTimeHandler(payDay int) timeHandler {
 	return timeHandler
 }
 
+// getDateToday returns the date of today
 func (t timeHandler) getDateToday() time.Time {
 	return t.createdAt
 }
 
+// getSalaryDateRaw returns the salary date before being validated
 func (t timeHandler) getSalaryDateRaw() time.Time {
 	todayDate := t.getDateToday()
 	y, m, _ := todayDate.Date()
@@ -38,6 +40,10 @@ func (t timeHandler) getSalaryDateRaw() time.Time {
 	return sdRaw
 }
 
+// A method that checks if a day falls on weekend
+// If so, it returns the date on friday prior or after.
+// prior if the request was made before that friday
+// after if the request was made after that friday
 func (t timeHandler) getVerifiedDay(day time.Time) time.Time {
 	_, _, d := day.Date()
 
@@ -62,20 +68,24 @@ func (t timeHandler) getVerifiedDay(day time.Time) time.Time {
 	return verifiedDay
 }
 
+// getSalaryDate return salary's date
 func (t timeHandler) getSalaryDate() time.Time {
 	salaryDate := t.getVerifiedDay(t.getSalaryDateRaw())
 	return salaryDate
 
 }
 
+// getInterval returns how many days are left till salary day
 func (t timeHandler) getInterval() int {
 	return int(t.getSalaryDate().Sub(t.getDateToday()).Hours() / 24)
 }
 
+// getResponseDate returns the field values of SalaryDay response
 func (t timeHandler) getResponseDate() (int, string) {
 	return t.getInterval(), t.getSalaryDate().String()
 }
 
+// getResponseDates returns the field values of Months response
 func (t timeHandler) getResponseDates() []string {
 	var dates []string
 	salaryDay := t.getSalaryDate()

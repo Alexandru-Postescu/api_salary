@@ -60,7 +60,7 @@ func Test_handlers_sendResponse(t *testing.T) {
 	gotBody, _ := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
-	wantBody, _ := json.Marshal(monthsResponse)
+	wantBody, _ := json.MarshalIndent(monthsResponse, "", "\n")
 	if !reflect.DeepEqual(gotBody, wantBody) {
 		t.Errorf("got: %v want :%v", gotBody, wantBody)
 	}

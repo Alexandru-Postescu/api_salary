@@ -16,6 +16,7 @@ func NewHandlers(logger *log.Logger) *handlers {
 	}
 }
 
+// loggerHandler is logging the duration of a incoming request to the router
 func (h *handlers) loggerHandler(next http.HandlerFunc) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		startTime := time.Now()
@@ -24,6 +25,7 @@ func (h *handlers) loggerHandler(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// SetupRoutes is setting up the router by mapping the endpoints to their corresponding handler
 func (h *handlers) SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/v1/list-how-much", h.loggerHandler(h.getGetRequestOnly(h.getValidQueryOnly(h.handleSalaryDay))))
 	mux.HandleFunc("/v1/list-how-many", h.loggerHandler(h.getGetRequestOnly(h.getValidQueryOnly(h.handleMonths))))

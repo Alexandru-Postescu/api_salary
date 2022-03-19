@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// handleSalaryDay handles the request to the "/v1/list-how-much" endpoint
 func (h *handlers) handleSalaryDay(rw http.ResponseWriter, r *http.Request) {
 	in, err := h.getInput(r)
 	if err != nil {
@@ -13,7 +14,6 @@ func (h *handlers) handleSalaryDay(rw http.ResponseWriter, r *http.Request) {
 	}
 	th := NewTimeHandler(in)
 	output := h.getSalaryDayResponse(th)
-	h.logger.Printf("%v", in)
 	h.logger.Println("handling salary day request")
 	err = h.sendResponse(rw, output)
 	if err != nil {
@@ -23,6 +23,7 @@ func (h *handlers) handleSalaryDay(rw http.ResponseWriter, r *http.Request) {
 
 }
 
+// handleSalaryDay handles the request to the "/v1/list-how-many" endpoint
 func (h *handlers) handleMonths(rw http.ResponseWriter, r *http.Request) {
 	in, err := h.getInput(r)
 	if err != nil {
@@ -41,6 +42,7 @@ func (h *handlers) handleMonths(rw http.ResponseWriter, r *http.Request) {
 
 }
 
+// getInput reads the input from the request
 func (h *handlers) getInput(req *http.Request) (int, error) {
 	values := req.URL.Query()
 
